@@ -161,7 +161,6 @@ export default function NewsFeed() {
 
   return (
     <div className="w-full py-10">
-      <h2 className="text-2xl font-bold mb-6 text-center">Últimas Notícias</h2>
       {loading ? (
         // Loading skeleton for carousel
         <div className="w-full relative px-12">

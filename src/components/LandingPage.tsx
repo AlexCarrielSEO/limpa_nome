@@ -28,13 +28,28 @@ import {
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
+import { BrandTiktok } from "./ui/brand-tiktok";
 import NewsFeed from "@/components/NewsFeed";
-import BrazilStatesMap from "@/components/BrazilStatesMap";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [activeCategory, setActiveCategory] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const categoriesRef = useRef<HTMLDivElement>(null);
+
+  // Detectar se é dispositivo móvel
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
 
   const scrollCategories = (direction: "left" | "right") => {
     if (categoriesRef.current) {
@@ -57,46 +72,54 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-screen bg-white relative">
       {/* Topo da Página */}
       <header className="w-full bg-white shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-xl font-bold text-blue-800">
-            LIMPA NOME SPC e SERASA
-          </div>
-          <nav className="hidden md:flex space-x-6 items-center">
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              Home
-            </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              Empresa
-            </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              Blog
-            </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              FAQ
-            </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              Contato
-            </a>
-            <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-              Fale Conosco
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div className="text-xl font-bold text-blue-800">
+              LIMPA NOME SPC e SERASA
+            </div>
+            <nav className="hidden md:flex space-x-6 items-center">
+              <a href="#" className="text-gray-700 hover:text-blue-600">
+                Home
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600">
+                Empresa
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600">
+                Blog
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600">
+                FAQ
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600">
+                Contato
+              </a>
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white hover:scale-105 transition-transform duration-300">
+                Fale Conosco
+              </Button>
+            </nav>
+            <Button className="md:hidden" variant="outline" aria-label="Menu">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
             </Button>
-          </nav>
-          <Button className="md:hidden" variant="outline" aria-label="Menu">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </Button>
+          </div>
+          {/* Botão de Orçamento para mobile - centralizado com efeito de pulsação */}
+          <div className="md:hidden flex justify-center mt-3 mb-2">
+            <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 text-lg shadow-lg hover:animate-none transition-all duration-300 transform hover:scale-105 animate-[pulse_2s_ease-in-out_infinite,wiggle_1s_ease-in-out_infinite]">
+              Orçamento
+            </Button>
+          </div>
         </div>
 
         {/* Menu de Categorias */}
@@ -149,13 +172,6 @@ export default function LandingPage() {
             <ChevronRight size={20} />
           </button>
         </div>
-
-        {/* Botão de Orçamento centralizado e pulsante - apenas para mobile e tablet */}
-        <div className="md:hidden flex justify-center -mb-6 relative z-20">
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 text-lg shadow-lg cta-button-pulse">
-            Orçamento
-          </Button>
-        </div>
       </header>
 
       <main className="flex-grow">
@@ -182,7 +198,7 @@ export default function LandingPage() {
                   SERASA. Recupere seu poder de compra e volte a realizar seus
                   sonhos.
                 </p>
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-6">
+                <Button className="bg-green-500 hover:bg-green-600 text-white text-lg px-8 py-6">
                   Consulte Agora
                 </Button>
               </div>
@@ -231,62 +247,130 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  title: "Negativação SPC",
-                  image:
-                    "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&q=80",
-                  description:
-                    "Resolva problemas de negativação no SPC com nossa assessoria especializada e recupere seu crédito.",
-                },
-                {
-                  title: "Negativação SERASA",
-                  image:
-                    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80",
-                  description:
-                    "Soluções rápidas para remover seu nome do SERASA e voltar a ter acesso ao crédito.",
-                },
-                {
-                  title: "Empréstimos",
-                  image:
-                    "https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?w=500&q=80",
-                  description:
-                    "Consultoria para obtenção de empréstimos com as melhores taxas após a limpeza do seu nome.",
-                },
-                {
-                  title: "Limpar Nome",
-                  image:
-                    "https://images.unsplash.com/photo-1589666564459-93cdd3ab856a?w=500&q=80",
-                  description:
-                    "Processo completo de limpeza do seu nome em todos os órgãos de proteção ao crédito.",
-                },
-              ].map((service, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-b from-white to-blue-50 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <div className="h-48 bg-gray-200 relative">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent flex items-end justify-center p-4">
-                      <h3 className="text-xl font-bold text-white">
-                        {service.title}
-                      </h3>
+            {isMobile ? (
+              <div className="relative">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {[
+                      {
+                        title: "Negativação SPC",
+                        image:
+                          "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&q=80",
+                        description:
+                          "Resolva problemas de negativação no SPC com nossa assessoria especializada e recupere seu crédito.",
+                      },
+                      {
+                        title: "Negativação SERASA",
+                        image:
+                          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80",
+                        description:
+                          "Soluções rápidas para remover seu nome do SERASA e voltar a ter acesso ao crédito.",
+                      },
+                      {
+                        title: "Empréstimos",
+                        image:
+                          "https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?w=500&q=80",
+                        description:
+                          "Consultoria para obtenção de empréstimos com as melhores taxas após a limpeza do seu nome.",
+                      },
+                      {
+                        title: "Limpar Nome",
+                        image:
+                          "https://images.unsplash.com/photo-1589666564459-93cdd3ab856a?w=500&q=80",
+                        description:
+                          "Processo completo de limpeza do seu nome em todos os órgãos de proteção ao crédito.",
+                      },
+                    ].map((service, index) => (
+                      <CarouselItem key={index}>
+                        <div className="bg-gradient-to-b from-white to-blue-50 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
+                          <div className="h-48 bg-gray-200 relative">
+                            <img
+                              src={service.image}
+                              alt={service.title}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent flex items-end justify-center p-4">
+                              <h3 className="text-xl font-bold text-white">
+                                {service.title}
+                              </h3>
+                            </div>
+                          </div>
+                          <div className="p-5">
+                            <p className="text-gray-600 mb-4">
+                              {service.description}
+                            </p>
+                            <Button className="bg-green-500 hover:bg-green-600 text-white w-full">
+                              Saiba Mais
+                            </Button>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                  <CarouselNext className="-right-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                </Carousel>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[
+                  {
+                    title: "Negativação SPC",
+                    image:
+                      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&q=80",
+                    description:
+                      "Resolva problemas de negativação no SPC com nossa assessoria especializada e recupere seu crédito.",
+                  },
+                  {
+                    title: "Negativação SERASA",
+                    image:
+                      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80",
+                    description:
+                      "Soluções rápidas para remover seu nome do SERASA e voltar a ter acesso ao crédito.",
+                  },
+                  {
+                    title: "Empréstimos",
+                    image:
+                      "https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?w=500&q=80",
+                    description:
+                      "Consultoria para obtenção de empréstimos com as melhores taxas após a limpeza do seu nome.",
+                  },
+                  {
+                    title: "Limpar Nome",
+                    image:
+                      "https://images.unsplash.com/photo-1589666564459-93cdd3ab856a?w=500&q=80",
+                    description:
+                      "Processo completo de limpeza do seu nome em todos os órgãos de proteção ao crédito.",
+                  },
+                ].map((service, index) => (
+                  <div
+                    key={index}
+                    className="bg-gradient-to-b from-white to-blue-50 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <div className="h-48 bg-gray-200 relative">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent flex items-end justify-center p-4">
+                        <h3 className="text-xl font-bold text-white">
+                          {service.title}
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <p className="text-gray-600 mb-4">
+                        {service.description}
+                      </p>
+                      <Button className="bg-green-500 hover:bg-green-600 text-white w-full">
+                        Saiba Mais
+                      </Button>
                     </div>
                   </div>
-                  <div className="p-5">
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-                    <Button className="bg-orange-500 hover:bg-orange-600 text-white w-full">
-                      Saiba Mais
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -329,11 +413,16 @@ export default function LandingPage() {
                   um atendimento humanizado e soluções personalizadas para cada
                   cliente.
                 </p>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-6">
                   Trabalhamos com transparência e ética, sempre buscando os
                   melhores acordos e condições para nossos clientes, respeitando
                   sua capacidade financeira e necessidades específicas.
                 </p>
+                <div className="flex justify-center mt-4">
+                  <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 text-lg">
+                    Entre em contato conosco
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -352,8 +441,60 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <Carousel className="w-full max-w-5xl mx-auto">
-              <CarouselContent>
+            {isMobile ? (
+              <div className="relative">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {[
+                      {
+                        name: "SPC Brasil",
+                        logo: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&q=80",
+                        bgColor: "bg-blue-50",
+                      },
+                      {
+                        name: "Serasa",
+                        logo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&q=80",
+                        bgColor: "bg-red-50",
+                      },
+                      {
+                        name: "Serasa Limpa Nome",
+                        logo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=500&q=80",
+                        bgColor: "bg-orange-50",
+                      },
+                      {
+                        name: "Acordo Certo",
+                        logo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=500&q=80",
+                        bgColor: "bg-green-50",
+                      },
+                    ].map((partner, index) => (
+                      <CarouselItem key={index}>
+                        <div className="transform transition-all duration-300 hover:-translate-y-1 h-full">
+                          <div
+                            className={`${partner.bgColor} rounded-xl shadow-lg overflow-hidden hover:shadow-xl h-full`}
+                          >
+                            <div className="p-6 flex flex-col items-center">
+                              <div className="w-full h-48 mb-6 overflow-hidden rounded-lg">
+                                <img
+                                  src={partner.logo}
+                                  alt={partner.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <h3 className="text-xl font-bold text-gray-800 text-center">
+                                {partner.name}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                  <CarouselNext className="-right-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                </Carousel>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                 {[
                   {
                     name: "SPC Brasil",
@@ -375,38 +516,31 @@ export default function LandingPage() {
                     logo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=500&q=80",
                     bgColor: "bg-green-50",
                   },
-                  {
-                    name: "Recovery",
-                    logo: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=500&q=80",
-                    bgColor: "bg-purple-50",
-                  },
                 ].map((partner, index) => (
-                  <CarouselItem
+                  <div
                     key={index}
-                    className="md:basis-1/3 lg:basis-1/4"
+                    className="transform transition-all duration-300 hover:-translate-y-1"
                   >
-                    <div className="p-4">
-                      <div
-                        className={`${partner.bgColor} rounded-lg shadow-lg p-6 h-32 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-105`}
-                      >
-                        <div className="w-16 h-16 rounded-full overflow-hidden mb-2">
+                    <div
+                      className={`${partner.bgColor} rounded-xl shadow-lg overflow-hidden hover:shadow-xl`}
+                    >
+                      <div className="p-6 flex flex-col items-center">
+                        <div className="w-full h-48 mb-6 overflow-hidden rounded-lg">
                           <img
                             src={partner.logo}
                             alt={partner.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="text-sm font-bold text-gray-700 text-center">
+                        <h3 className="text-xl font-bold text-gray-800 text-center">
                           {partner.name}
-                        </div>
+                        </h3>
                       </div>
                     </div>
-                  </CarouselItem>
+                  </div>
                 ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+              </div>
+            )}
           </div>
         </section>
 
@@ -492,6 +626,123 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Seção Conheça Nossa Equipe */}
+        <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                Conheça Nossa Equipe
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Nossa equipe é completa com os profissionais que você precisa
+              </p>
+            </div>
+
+            {isMobile ? (
+              <div className="relative">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {[
+                      {
+                        name: "Carlos Silva",
+                        position: "Advogado",
+                        image:
+                          "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80",
+                      },
+                      {
+                        name: "Ana Oliveira",
+                        position: "Consultora Financeira",
+                        image:
+                          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80",
+                      },
+                      {
+                        name: "Roberto Santos",
+                        position: "Analista de Crédito",
+                        image:
+                          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80",
+                      },
+                      {
+                        name: "Juliana Costa",
+                        position: "Atendimento ao Cliente",
+                        image:
+                          "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&q=80",
+                      },
+                    ].map((member, index) => (
+                      <CarouselItem key={index}>
+                        <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
+                          <div className="h-64 bg-gray-200 relative">
+                            <img
+                              src={member.image}
+                              alt={member.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="p-5 text-center">
+                            <h3 className="text-xl font-bold text-gray-800 mb-1">
+                              {member.name}
+                            </h3>
+                            <p className="text-gray-600">{member.position}</p>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                  <CarouselNext className="-right-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                </Carousel>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[
+                  {
+                    name: "Carlos Silva",
+                    position: "Advogado",
+                    image:
+                      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80",
+                  },
+                  {
+                    name: "Ana Oliveira",
+                    position: "Consultora Financeira",
+                    image:
+                      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80",
+                  },
+                  {
+                    name: "Roberto Santos",
+                    position: "Analista de Crédito",
+                    image:
+                      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80",
+                  },
+                  {
+                    name: "Juliana Costa",
+                    position: "Atendimento ao Cliente",
+                    image:
+                      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&q=80",
+                  },
+                ].map((member, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <div className="h-64 bg-gray-200 relative">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-5 text-center">
+                      <h3 className="text-xl font-bold text-gray-800 mb-1">
+                        {member.name}
+                      </h3>
+                      <p className="text-gray-600">{member.position}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* Seção de Depoimentos */}
         <section className="py-16 bg-gradient-to-t from-gray-50 to-white">
           <div className="container mx-auto px-4">
@@ -505,8 +756,79 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <Carousel className="w-full max-w-5xl mx-auto">
-              <CarouselContent>
+            {isMobile ? (
+              <div className="relative">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {[
+                      {
+                        name: "Carlos Silva",
+                        location: "São Paulo, SP",
+                        text: "Estava com meu nome negativado há mais de 2 anos e não conseguia mais fazer compras a prazo. Em apenas 45 dias, a equipe conseguiu limpar meu nome e hoje já tenho cartão de crédito novamente!",
+                      },
+                      {
+                        name: "Maria Oliveira",
+                        location: "Rio de Janeiro, RJ",
+                        text: "Excelente atendimento e profissionalismo. Conseguiram um desconto de 75% na minha dívida e em 30 dias meu nome já estava limpo. Super recomendo!",
+                      },
+                      {
+                        name: "João Pereira",
+                        location: "Belo Horizonte, MG",
+                        text: "Tinha dívidas em 3 bancos diferentes e não via saída. A equipe negociou valores que cabiam no meu orçamento e me orientou em todo o processo. Muito grato!",
+                      },
+                      {
+                        name: "Ana Santos",
+                        location: "Salvador, BA",
+                        text: "Atendimento humanizado e resultados rápidos. Consegui limpar meu nome em menos de 60 dias e agora estou reconstruindo minha vida financeira.",
+                      },
+                    ].map((item, index) => (
+                      <CarouselItem key={index}>
+                        <div className="h-full px-1">
+                          <Card className="h-full">
+                            <CardContent className="p-6">
+                              <div className="flex flex-col space-y-4 h-full">
+                                <div className="flex items-center space-x-4">
+                                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
+                                    {item.name.charAt(0)}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium text-base">
+                                      {item.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {item.location}
+                                    </div>
+                                  </div>
+                                </div>
+                                <p className="text-gray-600 italic leading-relaxed my-4 flex-grow text-sm">
+                                  "{item.text}"
+                                </p>
+                                <div className="flex">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <svg
+                                      key={star}
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-5 w-5 text-yellow-400"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                  <CarouselNext className="-right-4 bg-blue-600 text-white hover:bg-blue-700 border-none" />
+                </Carousel>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
                   {
                     name: "Carlos Silva",
@@ -529,51 +851,46 @@ export default function LandingPage() {
                     text: "Atendimento humanizado e resultados rápidos. Consegui limpar meu nome em menos de 60 dias e agora estou reconstruindo minha vida financeira.",
                   },
                 ].map((item, index) => (
-                  <CarouselItem
-                    key={index}
-                    className="md:basis-1/2 lg:basis-1/3"
-                  >
-                    <div className="p-4">
-                      <Card>
-                        <CardContent className="p-6">
-                          <div className="flex flex-col space-y-4">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                                {item.name.charAt(0)}
-                              </div>
-                              <div>
-                                <div className="font-medium">{item.name}</div>
-                                <div className="text-sm text-gray-500">
-                                  {item.location}
-                                </div>
-                              </div>
+                  <div key={index} className="h-full">
+                    <Card className="h-full">
+                      <CardContent className="p-8">
+                        <div className="flex flex-col space-y-6 h-full">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
+                              {item.name.charAt(0)}
                             </div>
-                            <p className="text-gray-600 italic">
-                              "{item.text}"
-                            </p>
-                            <div className="flex">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                <svg
-                                  key={star}
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-5 w-5 text-yellow-400"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
+                            <div>
+                              <div className="font-medium text-base">
+                                {item.name}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {item.location}
+                              </div>
                             </div>
                           </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CarouselItem>
+                          <p className="text-gray-600 italic leading-relaxed my-4 flex-grow">
+                            "{item.text}"
+                          </p>
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <svg
+                                key={star}
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5 text-yellow-400"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+              </div>
+            )}
           </div>
         </section>
 
@@ -592,24 +909,6 @@ export default function LandingPage() {
 
             {/* Componente de Feed de Notícias */}
             <NewsFeed />
-          </div>
-        </section>
-
-        {/* Seção de Atendimento por Localidade */}
-        <section className="py-16 bg-gradient-to-b from-white to-blue-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                Atendimento por Localidade
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Estamos presentes em todos os 27 estados do Brasil para melhor
-                atender você. Selecione um estado para ver mais informações.
-              </p>
-            </div>
-
-            {/* Componente de Mapa dos Estados */}
-            <BrazilStatesMap />
           </div>
         </section>
 
@@ -633,7 +932,7 @@ export default function LandingPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white whitespace-nowrap">
+                <Button className="bg-green-500 hover:bg-green-600 text-white whitespace-nowrap">
                   Inscrever-se
                 </Button>
               </div>
@@ -669,6 +968,9 @@ export default function LandingPage() {
                 </a>
                 <a href="#" className="text-gray-400 hover:text-white">
                   <Youtube className="h-6 w-6" />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <BrandTiktok className="h-6 w-6" />
                 </a>
               </div>
             </div>
@@ -747,7 +1049,7 @@ export default function LandingPage() {
                   className="bg-gray-800 border-gray-700"
                   rows={3}
                 />
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white w-full">
+                <Button className="bg-green-500 hover:bg-green-600 text-white w-full">
                   Enviar Mensagem
                 </Button>
               </div>
@@ -762,7 +1064,7 @@ export default function LandingPage() {
               </div>
               <div className="text-gray-400 text-sm">
                 Desenvolvido por{" "}
-                <a href="#" className="text-orange-500 hover:text-orange-400">
+                <a href="#" className="text-green-500 hover:text-green-400">
                   Agência Web
                 </a>
               </div>

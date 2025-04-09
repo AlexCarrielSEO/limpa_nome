@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, ChevronDown, ChevronUp } from "lucide-react";
 
 interface BrazilState {
   name: string;
@@ -8,171 +8,272 @@ interface BrazilState {
   coordinates: { lat: number; lng: number };
 }
 
-export default function BrazilStatesMap() {
-  const [selectedState, setSelectedState] = useState<BrazilState | null>(null);
+interface City {
+  name: string;
+  coordinates: { lat: number; lng: number };
+}
 
-  const brazilStates: BrazilState[] = [
+interface BrazilStateWithCities extends BrazilState {
+  cities: City[];
+  expanded: boolean;
+}
+
+export default function BrazilStatesMap() {
+  const [selectedState, setSelectedState] =
+    useState<BrazilStateWithCities | null>(null);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+
+  // Sample cities for each state (just a few examples for now)
+  const getStateCities = (stateAbbr: string): City[] => {
+    const citiesMap: Record<string, City[]> = {
+      SP: [
+        { name: "São Paulo", coordinates: { lat: -23.5505, lng: -46.6333 } },
+        { name: "Campinas", coordinates: { lat: -22.9071, lng: -47.0625 } },
+        { name: "Santos", coordinates: { lat: -23.9608, lng: -46.3339 } },
+      ],
+      RJ: [
+        {
+          name: "Rio de Janeiro",
+          coordinates: { lat: -22.9068, lng: -43.1729 },
+        },
+        { name: "Niterói", coordinates: { lat: -22.8832, lng: -43.1154 } },
+        { name: "Petrópolis", coordinates: { lat: -22.5112, lng: -43.1779 } },
+      ],
+      MG: [
+        {
+          name: "Belo Horizonte",
+          coordinates: { lat: -19.9102, lng: -43.9266 },
+        },
+        { name: "Uberlândia", coordinates: { lat: -18.9186, lng: -48.2772 } },
+        { name: "Juiz de Fora", coordinates: { lat: -21.7642, lng: -43.3496 } },
+      ],
+      // Add more cities for other states as needed
+    };
+
+    return (
+      citiesMap[stateAbbr] || [
+        { name: "Cidade Principal", coordinates: { lat: 0, lng: 0 } },
+        { name: "Cidade Secundária", coordinates: { lat: 0, lng: 0 } },
+      ]
+    );
+  };
+
+  const brazilStates: BrazilStateWithCities[] = [
     {
       name: "Acre",
       abbreviation: "AC",
       region: "Norte",
       coordinates: { lat: -9.0238, lng: -70.812 },
+      cities: getStateCities("AC"),
+      expanded: false,
     },
     {
       name: "Alagoas",
       abbreviation: "AL",
       region: "Nordeste",
       coordinates: { lat: -9.5713, lng: -36.782 },
+      cities: getStateCities("AL"),
+      expanded: false,
     },
     {
       name: "Amapá",
       abbreviation: "AP",
       region: "Norte",
       coordinates: { lat: 0.902, lng: -52.003 },
+      cities: getStateCities("AP"),
+      expanded: false,
     },
     {
       name: "Amazonas",
       abbreviation: "AM",
       region: "Norte",
       coordinates: { lat: -3.4168, lng: -65.8561 },
+      cities: getStateCities("AM"),
+      expanded: false,
     },
     {
       name: "Bahia",
       abbreviation: "BA",
       region: "Nordeste",
       coordinates: { lat: -12.9718, lng: -38.5011 },
+      cities: getStateCities("BA"),
+      expanded: false,
     },
     {
       name: "Ceará",
       abbreviation: "CE",
       region: "Nordeste",
       coordinates: { lat: -3.7172, lng: -38.5433 },
+      cities: getStateCities("CE"),
+      expanded: false,
     },
     {
       name: "Distrito Federal",
       abbreviation: "DF",
       region: "Centro-Oeste",
       coordinates: { lat: -15.7801, lng: -47.9292 },
+      cities: getStateCities("DF"),
+      expanded: false,
     },
     {
       name: "Espírito Santo",
       abbreviation: "ES",
       region: "Sudeste",
       coordinates: { lat: -20.3155, lng: -40.3128 },
+      cities: getStateCities("ES"),
+      expanded: false,
     },
     {
       name: "Goiás",
       abbreviation: "GO",
       region: "Centro-Oeste",
       coordinates: { lat: -16.6864, lng: -49.2643 },
+      cities: getStateCities("GO"),
+      expanded: false,
     },
     {
       name: "Maranhão",
       abbreviation: "MA",
       region: "Nordeste",
       coordinates: { lat: -2.5297, lng: -44.3028 },
+      cities: getStateCities("MA"),
+      expanded: false,
     },
     {
       name: "Mato Grosso",
       abbreviation: "MT",
       region: "Centro-Oeste",
       coordinates: { lat: -15.601, lng: -56.0974 },
+      cities: getStateCities("MT"),
+      expanded: false,
     },
     {
       name: "Mato Grosso do Sul",
       abbreviation: "MS",
       region: "Centro-Oeste",
       coordinates: { lat: -20.4428, lng: -54.6464 },
+      cities: getStateCities("MS"),
+      expanded: false,
     },
     {
       name: "Minas Gerais",
       abbreviation: "MG",
       region: "Sudeste",
       coordinates: { lat: -19.9102, lng: -43.9266 },
+      cities: getStateCities("MG"),
+      expanded: false,
     },
     {
       name: "Pará",
       abbreviation: "PA",
       region: "Norte",
       coordinates: { lat: -1.4554, lng: -48.4898 },
+      cities: getStateCities("PA"),
+      expanded: false,
     },
     {
       name: "Paraíba",
       abbreviation: "PB",
       region: "Nordeste",
       coordinates: { lat: -7.115, lng: -34.8631 },
+      cities: getStateCities("PB"),
+      expanded: false,
     },
     {
       name: "Paraná",
       abbreviation: "PR",
       region: "Sul",
       coordinates: { lat: -25.4195, lng: -49.2646 },
+      cities: getStateCities("PR"),
+      expanded: false,
     },
     {
       name: "Pernambuco",
       abbreviation: "PE",
       region: "Nordeste",
       coordinates: { lat: -8.0476, lng: -34.877 },
+      cities: getStateCities("PE"),
+      expanded: false,
     },
     {
       name: "Piauí",
       abbreviation: "PI",
       region: "Nordeste",
       coordinates: { lat: -5.0919, lng: -42.8034 },
+      cities: getStateCities("PI"),
+      expanded: false,
     },
     {
       name: "Rio de Janeiro",
       abbreviation: "RJ",
       region: "Sudeste",
       coordinates: { lat: -22.9068, lng: -43.1729 },
+      cities: getStateCities("RJ"),
+      expanded: false,
     },
     {
       name: "Rio Grande do Norte",
       abbreviation: "RN",
       region: "Nordeste",
       coordinates: { lat: -5.7945, lng: -35.211 },
+      cities: getStateCities("RN"),
+      expanded: false,
     },
     {
       name: "Rio Grande do Sul",
       abbreviation: "RS",
       region: "Sul",
       coordinates: { lat: -30.0346, lng: -51.2177 },
+      cities: getStateCities("RS"),
+      expanded: false,
     },
     {
       name: "Rondônia",
       abbreviation: "RO",
       region: "Norte",
       coordinates: { lat: -8.7608, lng: -63.9039 },
+      cities: getStateCities("RO"),
+      expanded: false,
     },
     {
       name: "Roraima",
       abbreviation: "RR",
       region: "Norte",
       coordinates: { lat: 2.8198, lng: -60.6714 },
+      cities: getStateCities("RR"),
+      expanded: false,
     },
     {
       name: "Santa Catarina",
       abbreviation: "SC",
       region: "Sul",
       coordinates: { lat: -27.5954, lng: -48.5665 },
+      cities: getStateCities("SC"),
+      expanded: false,
     },
     {
       name: "São Paulo",
       abbreviation: "SP",
       region: "Sudeste",
       coordinates: { lat: -23.5505, lng: -46.6333 },
+      cities: getStateCities("SP"),
+      expanded: false,
     },
     {
       name: "Sergipe",
       abbreviation: "SE",
       region: "Nordeste",
       coordinates: { lat: -10.9472, lng: -37.0731 },
+      cities: getStateCities("SE"),
+      expanded: false,
     },
     {
       name: "Tocantins",
       abbreviation: "TO",
       region: "Norte",
       coordinates: { lat: -10.1753, lng: -48.2982 },
+      cities: getStateCities("TO"),
+      expanded: false,
     },
   ];
 
@@ -187,78 +288,158 @@ export default function BrazilStatesMap() {
     Sul: brazilStates.filter((state) => state.region === "Sul"),
   };
 
-  const handleStateClick = (state: BrazilState) => {
-    setSelectedState(state);
+  const handleStateClick = (state: BrazilStateWithCities) => {
+    // Toggle expanded state for the clicked state
+    const updatedStates = brazilStates.map((s) => {
+      if (s.abbreviation === state.abbreviation) {
+        return { ...s, expanded: !s.expanded };
+      }
+      return s;
+    });
+
+    // Update the state object with the new expanded value
+    const updatedState = updatedStates.find(
+      (s) => s.abbreviation === state.abbreviation,
+    )!;
+    setSelectedState(updatedState);
+    setSelectedCity(null); // Reset selected city when changing states
+  };
+
+  const handleCityClick = (city: City) => {
+    setSelectedCity(city);
   };
 
   return (
     <div className="w-full">
-      <div className="rounded-lg overflow-hidden shadow-lg mb-8">
-        <div className="aspect-[16/9] bg-blue-50 relative">
-          {selectedState ? (
-            <div className="w-full h-full flex flex-col items-center justify-center p-6">
-              <div
-                className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-20"
-                style={{
-                  backgroundImage:
-                    "url('https://images.unsplash.com/photo-1554844344-c34ea04258c4?w=1200&q=80')",
-                }}
-              ></div>
-              <div className="bg-white p-6 rounded-lg shadow-lg z-10 max-w-md w-full text-center">
-                <h3 className="text-2xl font-bold text-blue-800 mb-2">
-                  {selectedState.name}
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Left side - States list */}
+        <div className="w-full md:w-1/3 bg-white rounded-lg shadow-lg p-4 overflow-auto max-h-[600px]">
+          <h2 className="text-xl font-bold text-blue-800 mb-4">Estados</h2>
+          <div className="space-y-2">
+            {Object.entries(regions).map(([regionName, states]) => (
+              <div key={regionName} className="mb-4">
+                <h3 className="font-bold text-blue-800 border-b border-gray-200 pb-1 mb-2">
+                  {regionName}
                 </h3>
-                <p className="text-gray-600 mb-2">
-                  Região: {selectedState.region}
-                </p>
-                <p className="text-gray-600 mb-4">
-                  Sigla: {selectedState.abbreviation}
-                </p>
-                <div className="inline-block bg-blue-100 p-3 rounded-full mb-4">
-                  <MapPin className="h-8 w-8 text-blue-600" />
-                </div>
-                <p className="text-gray-700">
-                  Atendimento disponível em todo o estado de{" "}
-                  {selectedState.name}. Entre em contato com nossa central para
-                  mais informações.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-blue-50 p-6">
-              <div className="text-center max-w-md">
-                <MapPin className="h-16 w-16 mx-auto mb-4 text-blue-600" />
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Selecione um estado
-                </h3>
-                <p className="text-gray-600">
-                  Clique em um dos 27 estados brasileiros para visualizar
-                  informações de atendimento na região.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+                <div className="space-y-1">
+                  {states.map((state) => (
+                    <div key={state.abbreviation} className="space-y-1">
+                      <div
+                        onClick={() => handleStateClick(state)}
+                        className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-all duration-200 ${selectedState?.abbreviation === state.abbreviation ? "bg-blue-100 text-blue-800 font-medium" : "hover:bg-gray-100"}`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="h-4 w-4 text-blue-600" />
+                          <span>
+                            {state.name} ({state.abbreviation})
+                          </span>
+                        </div>
+                        {state.expanded ? (
+                          <ChevronUp className="h-4 w-4 text-blue-600" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-blue-600" />
+                        )}
+                      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {Object.entries(regions).map(([regionName, states]) => (
-          <div key={regionName} className="space-y-4">
-            <h3 className="font-bold text-blue-800">{regionName}</h3>
-            {states.map((state) => (
-              <div
-                key={state.abbreviation}
-                onClick={() => handleStateClick(state)}
-                className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer transition-all duration-200 ${selectedState?.abbreviation === state.abbreviation ? "bg-blue-100 text-blue-800 font-medium" : "hover:bg-gray-100"}`}
-              >
-                <MapPin className="h-4 w-4 text-blue-600" />
-                <span>
-                  {state.name} ({state.abbreviation})
-                </span>
+                      {/* Cities list */}
+                      {state.expanded && (
+                        <div className="pl-6 space-y-1 mt-1">
+                          {state.cities.map((city) => (
+                            <div
+                              key={city.name}
+                              onClick={() => handleCityClick(city)}
+                              className={`flex items-center space-x-2 p-2 rounded-md cursor-pointer transition-all duration-200 ${selectedCity?.name === city.name ? "bg-blue-50 text-blue-800 font-medium" : "hover:bg-gray-50"}`}
+                            >
+                              <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                              <span>{city.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
-        ))}
+        </div>
+
+        {/* Right side - Map */}
+        <div className="w-full md:w-2/3 rounded-lg overflow-hidden shadow-lg">
+          <div className="aspect-[4/3] bg-blue-50 relative">
+            {selectedCity ? (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6">
+                <div
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-20"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1554844344-c34ea04258c4?w=1200&q=80')",
+                  }}
+                ></div>
+                <div className="bg-white p-6 rounded-lg shadow-lg z-10 max-w-md w-full text-center">
+                  <h3 className="text-2xl font-bold text-blue-800 mb-2">
+                    {selectedCity.name}
+                  </h3>
+                  <p className="text-gray-600 mb-2">
+                    Estado: {selectedState?.name}
+                  </p>
+                  <p className="text-gray-600 mb-4">
+                    Região: {selectedState?.region}
+                  </p>
+                  <div className="inline-block bg-blue-100 p-3 rounded-full mb-4">
+                    <MapPin className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <p className="text-gray-700">
+                    Atendimento disponível em {selectedCity.name}. Entre em
+                    contato com nossa central para mais informações.
+                  </p>
+                </div>
+              </div>
+            ) : selectedState ? (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6">
+                <div
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-20"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1554844344-c34ea04258c4?w=1200&q=80')",
+                  }}
+                ></div>
+                <div className="bg-white p-6 rounded-lg shadow-lg z-10 max-w-md w-full text-center">
+                  <h3 className="text-2xl font-bold text-blue-800 mb-2">
+                    {selectedState.name}
+                  </h3>
+                  <p className="text-gray-600 mb-2">
+                    Região: {selectedState.region}
+                  </p>
+                  <p className="text-gray-600 mb-4">
+                    Sigla: {selectedState.abbreviation}
+                  </p>
+                  <div className="inline-block bg-blue-100 p-3 rounded-full mb-4">
+                    <MapPin className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <p className="text-gray-700">
+                    Atendimento disponível em todo o estado de{" "}
+                    {selectedState.name}. Entre em contato com nossa central
+                    para mais informações.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-blue-50 p-6">
+                <div className="text-center max-w-md">
+                  <MapPin className="h-16 w-16 mx-auto mb-4 text-blue-600" />
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    Selecione um estado
+                  </h3>
+                  <p className="text-gray-600">
+                    Clique em um dos 27 estados brasileiros para visualizar
+                    informações de atendimento na região.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

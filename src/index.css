@@ -13,6 +13,19 @@
   scrollbar-width: none; /* Firefox */
 }
 
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
