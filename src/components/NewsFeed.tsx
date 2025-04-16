@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 interface NewsItem {
   title: string;
@@ -17,10 +10,17 @@ interface NewsItem {
   source: string;
 }
 
-export default function NewsFeed() {
+interface NewsFeedProps {
+  searchQuery?: string;
+}
+
+export default function NewsFeed({
+  searchQuery = "limpa+nome",
+}: NewsFeedProps) {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [visibleItems, setVisibleItems] = useState(6);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -29,7 +29,7 @@ export default function NewsFeed() {
         // Using a CORS proxy to fetch from Google News RSS
         const response = await fetch(
           `https://api.allorigins.win/get?url=${encodeURIComponent(
-            "https://news.google.com/rss/search?q=limpa+nome&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+            `https://news.google.com/rss/search?q=${searchQuery}&hl=pt-BR&gl=BR&ceid=BR:pt-419`,
           )}`,
         );
 
@@ -80,75 +80,75 @@ export default function NewsFeed() {
         setNews([
           {
             title:
-              "Novas regras para negativação de consumidores entram em vigor",
+              "Novas técnicas de reabilitação para pacientes pós-AVC mostram resultados promissores",
             link: "#",
             pubDate: "15/05/2023",
             image:
-              "https://images.unsplash.com/photo-1521791055366-0d553872125f?w=500&q=80",
-            source: "Notícias Financeiras",
+              "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80",
+            source: "Saúde em Dia",
           },
           {
             title:
-              "Como o Cadastro Positivo pode ajudar a melhorar seu score de crédito",
+              "Fisioterapia domiciliar: como encontrar o profissional ideal para idosos",
             link: "#",
             pubDate: "02/06/2023",
             image:
-              "https://images.unsplash.com/photo-1560472355-536de3962603?w=500&q=80",
-            source: "Portal Econômico",
+              "https://images.unsplash.com/photo-1576765608866-5b51046452be?w=500&q=80",
+            source: "Portal da Saúde",
           },
           {
             title:
-              "Bancos oferecem condições especiais para renegociação de dívidas",
+              "Casas de repouso investem em programas de reabilitação cognitiva",
             link: "#",
             pubDate: "20/06/2023",
             image:
-              "https://images.unsplash.com/photo-1616803689943-5601631c7fec?w=500&q=80",
-            source: "Jornal Financeiro",
+              "https://images.unsplash.com/photo-1576765608866-5b51046452be?w=500&q=80",
+            source: "Jornal da Terceira Idade",
           },
           {
             title:
-              "Limpa Nome: Programa ajuda milhares a saírem da lista de inadimplentes",
+              "Reabilitação cardíaca: especialistas recomendam início precoce do tratamento",
             link: "#",
             pubDate: "25/06/2023",
             image:
-              "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=500&q=80",
-            source: "Economia Diária",
+              "https://images.unsplash.com/photo-1559757175-7cb057fba93c?w=500&q=80",
+            source: "Saúde do Coração",
           },
           {
             title:
-              "Especialistas recomendam negociação de dívidas antes do fim do ano",
+              "Tecnologia e reabilitação: aplicativos que auxiliam no tratamento domiciliar",
             link: "#",
             pubDate: "30/06/2023",
             image:
-              "https://images.unsplash.com/photo-1589666564459-93cdd3ab856a?w=500&q=80",
-            source: "Finanças Hoje",
+              "https://images.unsplash.com/photo-1551076805-e1869033e561?w=500&q=80",
+            source: "Tech Saúde",
           },
           {
             title:
-              "Limpa Nome Digital: nova plataforma facilita renegociação online",
+              "Reabilitação neurológica: novos protocolos melhoram qualidade de vida de pacientes",
             link: "#",
             pubDate: "05/07/2023",
             image:
-              "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80",
-            source: "Tech News",
+              "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=500&q=80",
+            source: "Neurociência Hoje",
           },
           {
             title:
-              "Consumidores relatam melhora no acesso ao crédito após limpar nome",
+              "Como escolher a melhor clínica de reabilitação para seu familiar idoso",
             link: "#",
             pubDate: "10/07/2023",
             image:
-              "https://images.unsplash.com/photo-1565514020179-026b92b2d70b?w=500&q=80",
-            source: "Mercado Financeiro",
+              "https://images.unsplash.com/photo-1576765608866-5b51046452be?w=500&q=80",
+            source: "Guia da Terceira Idade",
           },
           {
             title:
-              "Feirão Limpa Nome bate recorde de acordos no primeiro semestre",
+              "Reabilitação pós-COVID: o que esperar e como encontrar tratamento adequado",
             link: "#",
             pubDate: "15/07/2023",
             image:
-              "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=500&q=80",
-            source: "Economia Brasil",
+              "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500&q=80",
+            source: "Saúde Respiratória",
           },
         ]);
       } finally {
@@ -157,84 +157,89 @@ export default function NewsFeed() {
     };
 
     fetchNews();
-  }, []);
+  }, [searchQuery]);
+
+  const loadMoreItems = () => {
+    setVisibleItems((prevVisibleItems) =>
+      Math.min(prevVisibleItems + 2, news.length),
+    );
+  };
 
   return (
     <div className="w-full py-10">
-      <h2 className="text-2xl font-bold mb-6 text-center">Últimas Notícias</h2>
       {loading ? (
-        // Loading skeleton for carousel
-        <div className="w-full relative px-12">
-          <div className="flex gap-4 overflow-hidden">
-            {Array(4)
-              .fill(0)
-              .map((_, index) => (
-                <div
-                  key={`loading-${index}`}
-                  className="min-w-[300px] flex-shrink-0 overflow-hidden bg-white rounded-lg shadow-md"
-                >
-                  <div className="h-48 bg-gray-200 animate-pulse"></div>
-                  <div className="p-6">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-                    <div className="h-8 bg-gray-200 rounded animate-pulse mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-1/4"></div>
-                  </div>
+        // Loading skeleton for list
+        <div className="w-full max-w-4xl mx-auto">
+          {Array(4)
+            .fill(0)
+            .map((_, index) => (
+              <div
+                key={`loading-${index}`}
+                className="flex flex-col md:flex-row gap-4 mb-4 p-4 border-b border-gray-100"
+              >
+                <div className="w-full md:w-1/4 h-32 bg-gray-200 animate-pulse rounded-lg"></div>
+                <div className="w-full md:w-3/4">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-1/4"></div>
+                  <div className="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
                 </div>
-              ))}
-          </div>
+              </div>
+            ))}
         </div>
       ) : (
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full relative"
-        >
-          <CarouselContent>
-            {news.map((item, index) => (
-              <CarouselItem
-                key={index}
-                className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+        <div className="w-full max-w-4xl mx-auto divide-y divide-gray-100">
+          {news.slice(0, visibleItems).map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col md:flex-row gap-4 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors"
+            >
+              <div className="w-full md:w-1/4">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-32 object-cover rounded-lg"
+                />
+              </div>
+              <div className="w-full md:w-3/4 flex flex-col">
+                <div className="flex items-center mb-1">
+                  <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-0.5 rounded">
+                    {item.source}
+                  </span>
+                  <span className="text-xs text-gray-500 ml-2">
+                    {item.pubDate}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold mb-1 text-gray-800">
+                  {item.title}
+                </h3>
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                >
+                  <Button
+                    variant="link"
+                    className="text-blue-600 p-0 h-auto text-sm"
+                  >
+                    Ler mais
+                  </Button>
+                </a>
+              </div>
+            </div>
+          ))}
+
+          {visibleItems < news.length && (
+            <div className="text-center mt-8">
+              <Button
+                onClick={loadMoreItems}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full"
               >
-                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white h-full">
-                  <div className="h-48 relative">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm text-gray-500">
-                        {item.pubDate}
-                      </div>
-                      <div className="text-xs text-gray-400">{item.source}</div>
-                    </div>
-                    <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="link"
-                        className="text-blue-600 p-0 h-auto"
-                      >
-                        Ler mais
-                      </Button>
-                    </a>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-4 md:-left-6" />
-          <CarouselNext className="-right-4 md:-right-6" />
-        </Carousel>
+                Ver Mais Notícias
+              </Button>
+            </div>
+          )}
+        </div>
       )}
       {error && (
         <div className="text-center text-sm text-gray-500 mt-4">{error}</div>

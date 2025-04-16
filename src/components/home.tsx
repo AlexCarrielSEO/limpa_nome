@@ -1,7 +1,7 @@
-import LandingPage from "./LandingPage";
+import ReabilitaLandingPage from "./ReabilitaLandingPage";
 
 function Home() {
-  return <LandingPage />;
+  return <ReabilitaLandingPage />;
 }
 
 export default Home;
