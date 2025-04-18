@@ -593,6 +593,117 @@ export default function ReabilitaLandingPage() {
         </div>
       </section>
 
+      {/* Depoimentos Section */}
+      <section id="depoimentos" className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-green-500 mb-4">
+            O que nossos clientes dizem
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12 text-center">
+            Agradecemos a confiança dos nossos clientes, que nos permitem fazer
+            parte de suas jornadas de recuperação e bem-estar.
+          </p>
+
+          <div className="relative overflow-hidden">
+            <div className="flex gap-6 justify-center">
+              {/* Testimonial 1 */}
+              <div className="min-w-[350px] max-w-[350px] bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                <div className="bg-gray-900 p-6 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                    <img
+                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mizex"
+                      alt="Mizex Cem"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">Mizex Cem</h3>
+                    <div className="flex text-green-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4" fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    Super recomendo. Trabalho com bastante clareza na hora do
+                    orçamento e manutenção. Atendimento muito bom do início ao
+                    fim.
+                  </p>
+                </div>
+              </div>
+
+              {/* Testimonial 2 */}
+              <div className="min-w-[350px] max-w-[350px] bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                <div className="bg-gray-900 p-6 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                    <img
+                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Fabricio"
+                      alt="Fabrício Rangel"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">
+                      Fabrício Rangel
+                    </h3>
+                    <div className="flex text-green-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4" fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    Atendimento muito bom, bem educados e deixando sempre bem
+                    claro os serviços que serão realizado e também bem
+                    flexíveis.
+                  </p>
+                </div>
+              </div>
+
+              {/* Testimonial 3 */}
+              <div className="min-w-[350px] max-w-[350px] bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                <div className="bg-gray-900 p-6 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                    <img
+                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Vagner"
+                      alt="Vagner JM"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">Vagner JM</h3>
+                    <div className="flex text-green-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4" fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    Fui muito bem atendido pessoal nota 10. Explicaram e
+                    mostraram os serviços que foram executados e mostraram as
+                    peças com defeito.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation buttons */}
+            <button className="absolute left-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 z-10">
+              <ChevronRight className="h-6 w-6 text-gray-600 rotate-180" />
+            </button>
+            <button className="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 z-10">
+              <ChevronRight className="h-6 w-6 text-gray-600" />
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* News Feed Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
